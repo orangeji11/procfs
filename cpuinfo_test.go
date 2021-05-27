@@ -183,6 +183,77 @@ VCED exceptions		: not available
 VCEI exceptions		: not available
 
 `
+	cpuinfoLoongarch = `
+system type		: generic-loongson-machine
+machine			: Unknown
+processor		: 0
+package			: 0
+core			: 0
+cpu model		: Loongson-64bit
+model name		: Loongson-3A5000
+CPU Revision		: 0x10
+FPU Revision		: 0x00
+CPU MHz			: 2300.00
+BogoMIPS		: 4592.64
+tlb_entries		: 2112
+isa			: loongarch32 loongarch64
+ASEs implemented	: cpucfg lamo lsx lasx lvz lbt
+kscratch registers	: 3
+idle instruction	: yes
+microsecond timers	: yes
+hardware watchpoint	: yes, iwatch count: 8, dwatch count: 8
+
+processor		: 1
+package			: 0
+core			: 1
+cpu model		: Loongson-64bit
+model name		: Loongson-3A5000
+CPU Revision		: 0x10
+FPU Revision		: 0x00
+CPU MHz			: 2300.00
+BogoMIPS		: 4592.64
+tlb_entries		: 2112
+isa			: loongarch32 loongarch64
+ASEs implemented	: cpucfg lamo lsx lasx lvz lbt
+kscratch registers	: 3
+idle instruction	: yes
+microsecond timers	: yes
+hardware watchpoint	: yes, iwatch count: 8, dwatch count: 8
+
+processor		: 2
+package			: 0
+core			: 2
+cpu model		: Loongson-64bit
+model name		: Loongson-3A5000
+CPU Revision		: 0x10
+FPU Revision		: 0x00
+CPU MHz			: 2300.00
+BogoMIPS		: 4592.64
+tlb_entries		: 2112
+isa			: loongarch32 loongarch64
+ASEs implemented	: cpucfg lamo lsx lasx lvz lbt
+kscratch registers	: 3
+idle instruction	: yes
+microsecond timers	: yes
+hardware watchpoint	: yes, iwatch count: 8, dwatch count: 8
+
+processor		: 3
+package			: 0
+core			: 3
+cpu model		: Loongson-64bit
+model name		: Loongson-3A5000
+CPU Revision		: 0x10
+FPU Revision		: 0x00
+CPU MHz			: 2300.00
+BogoMIPS		: 4592.64
+tlb_entries		: 2112
+isa			: loongarch32 loongarch64
+ASEs implemented	: cpucfg lamo lsx lasx lvz lbt
+kscratch registers	: 3
+idle instruction	: yes
+microsecond timers	: yes
+hardware watchpoint	: yes, iwatch count: 8, dwatch count: 8	
+`
 
 	cpuinfoPpc64 = `
 processor	: 0
@@ -369,6 +440,18 @@ func TestCPUInfoParseMips(t *testing.T) {
 		t.Errorf("want BogoMIPS %v, have %v", want, have)
 	}
 	if want, have := "Cavium Octeon+ V0.1", cpuinfo[1].ModelName; want != have {
+		t.Errorf("want ModelName '%v', have '%v'", want, have)
+	}
+}
+func TestCPUInfoParseLoongarch(t *testing.T) {
+	cpuinfo, err := parseCPUInfoLoongarch([]byte(cpuinfoLoongarch))
+	if err != nil || cpuinfo == nil {
+		t.Fatalf("unable to parse loong64 cpu info: %v", err)
+	}
+	if want, have := 4, len(cpuinfo); want != have {
+		t.Errorf("want number of processors %v, have %v", want, have)
+	}
+	if want, have := "loongarch32 loongarch64", cpuinfo[1].ModelName; want != have {
 		t.Errorf("want ModelName '%v', have '%v'", want, have)
 	}
 }
